@@ -14,5 +14,5 @@ public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
 
     List<Meeting> findByGroupId(Integer groupId);
 
-    boolean existsByGroup_IdAndUser_Id(Integer groupId, Integer userId);
+    boolean existsByGroup_IdAndCreatedBy_Id(Integer groupId, Integer userId);
 }
