@@ -119,7 +119,7 @@ public class GraphLoader {
                     );
                 }
 
-                double distance = haversine(
+                double distance = input.distanceMeters() != null ? input.distanceMeters() : haversine(
                         from.latitude(),
                         from.longitude(),
                         to.latitude(),
@@ -296,11 +296,13 @@ public class GraphLoader {
                 * Math.asin(Math.sqrt(Math.min(1.0, a)));
     }
 
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
     private record GraphEdgeInput(
             Long fromNodeId,
             Long toNodeId,
             Long from,
             Long to,
-            Boolean bidirectional
+            Boolean bidirectional,
+            Double distanceMeters
     ) {}
 }

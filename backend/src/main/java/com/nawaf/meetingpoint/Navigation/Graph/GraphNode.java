@@ -3,6 +3,7 @@ package com.nawaf.meetingpoint.Navigation.Graph;
 
 import jakarta.validation.constraints.*;
 
+@com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public record GraphNode(
 
         @NotNull

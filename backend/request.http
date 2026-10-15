@@ -1,0 +1,268 @@
+# ExpoSpot — IntelliJ IDEA HTTP Client
+# Start the backend and its configured MySQL database before sending requests.
+# Run requests individually. Location PUTs persist data; recommendation/routes
+# requests also broadcast to connected STOMP subscribers.
+# Replace groupId/user IDs with existing group memberships for contextual requests.
+# Graph-only requests and explicit-GPS optimization do not require membership.
+# Coordinates below belong to the checked-in graph, not Riyadh.
+# Full response contracts and STOMP examples: docs/navigation-api.md
+
+@baseUrl = http://localhost:8080
+@groupId = 1
+@userId = 7
+@secondUserId = 8
+@fromNodeId = 3206
+@toNodeId = 1081
+@startLatitude = 24.957803
+@startLongitude = 55.1562148
+@destinationLatitude = 24.9566629
+@destinationLongitude = 55.1462239
+
+### List meeting-point candidates — 200
+# يعرض نقاط الالتقاء المتاحة في الخريطة مع المعرّف والاسم والإحداثيات. النتيجة المتوقعة: 200.
+GET {{baseUrl}}/api/v1/navigation/meeting-points
+Accept: application/json
+
+### Get frontend graph data — 200 (large response)
+# يعرض عقد الخريطة وممرات المشي ونقاط الالتقاء لاستخدامها في عرض الخريطة بالواجهة. الاستجابة كبيرة، والنتيجة المتوقعة: 200.
+GET {{baseUrl}}/api/v1/navigation/graph
+Accept: application/json
+
+### Route between graph nodes: Earth Plaza to Sea Plaza — 200
+# يحسب أقصر مسار مشي من عقدة البداية إلى عقدة الوجهة، ويعيد الإحداثيات المرتبة والمسافة بالمتر والمدة بالثواني. النتيجة المتوقعة: 200.
+POST {{baseUrl}}/api/v1/navigation/route
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fromNodeId": {{fromNodeId}},
+  "toNodeId": {{toNodeId}}
+}
+
+### Identical endpoints: zero distance, zero duration, one path point — 200
+# يتحقق من حالة تطابق البداية والوجهة؛ يعيد مسافة ومدة تساويان صفرًا ومسارًا يحتوي على نقطة واحدة. النتيجة المتوقعة: 200.
+POST {{baseUrl}}/api/v1/navigation/route
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fromNodeId": {{fromNodeId}},
+  "toNodeId": {{fromNodeId}}
+}
+
+### Snap GPS to a walkable edge — 200
+# يطابق إحداثيات GPS مع أقرب موضع على ممر مشي، ويعيد الموضع المطابق وبعده عن الإحداثيات الأصلية ومعلومات الممر. النتيجة المتوقعة: 200.
+POST {{baseUrl}}/api/v1/navigation/map-match
+Content-Type: application/json
+Accept: application/json
+
+{
+  "latitude": {{startLatitude}},
+  "longitude": {{startLongitude}}
+}
+
+### GPS route with snapped endpoints, walking distance and ETA — 200
+# يطابق إحداثيات البداية والوجهة مع ممرات الخريطة، ثم يحسب مسار المشي بينهما مع المسافة والمدة المتوقعة. النتيجة المتوقعة: 200.
+POST {{baseUrl}}/api/v1/navigation/route/gps
+Content-Type: application/json
+Accept: application/json
+
+{
+  "start": {
+    "latitude": {{startLatitude}},
+    "longitude": {{startLongitude}}
+  },
+  "destination": {
+    "latitude": {{destinationLatitude}},
+    "longitude": {{destinationLongitude}}
+  }
+}
+
+### Optimize two explicit GPS observations — 200, no broadcast
+# يختار نقطة الالتقاء التي تقلل أطول زمن وصول بين المشاركين باستخدام الإحداثيات المرسلة، ويعيد مسار كل مشارك. يولّد وقت رصد حديثًا تلقائيًا، ولا يتطلب عضوية مجموعة في هذا المثال ولا يبث النتيجة. النتيجة المتوقعة: 200.
+# Generates a fresh UTC observation timestamp for every execution.
+< {%
+    request.variables.set("observedAt", new Date().toISOString());
+%}
+POST {{baseUrl}}/api/v1/navigation/optimize
+Content-Type: application/json
+Accept: application/json
+
+{
+  "participants": [
+    {
+      "userId": {{userId}},
+      "latitude": {{startLatitude}},
+      "longitude": {{startLongitude}},
+      "updatedAt": "{{observedAt}}"
+    },
+    {
+      "userId": {{secondUserId}},
+      "latitude": {{destinationLatitude}},
+      "longitude": {{destinationLongitude}},
+      "updatedAt": "{{observedAt}}"
+    }
+  ]
+}
+
+### Save first member's latest location — 200 (requires existing membership)
+# يحفظ أحدث موقع للعضو الأول ويُفعّل مشاركة موقعه؛ يشترط وجود عضويته في المجموعة. عند غياب updatedAt يُستخدم وقت استلام الخادم. النتيجة المتوقعة: 200.
+# Omitting updatedAt uses server receipt time and enables location sharing.
+PUT {{baseUrl}}/api/v1/group/{{groupId}}/locations
+Content-Type: application/json
+Accept: application/json
+
+{
+  "groupId": {{groupId}},
+  "userId": {{userId}},
+  "latitude": {{startLatitude}},
+  "longitude": {{startLongitude}},
+  "accuracyMeters": 4.0
+}
+
+### Save second member's latest location — 200 (requires existing membership)
+# يحفظ أحدث موقع للعضو الثاني ويُفعّل مشاركة موقعه؛ يشترط وجود عضويته في المجموعة. يُستخدم هذا الموقع مع موقع العضو الأول عند حساب نقطة الالتقاء. النتيجة المتوقعة: 200.
+PUT {{baseUrl}}/api/v1/group/{{groupId}}/locations
+Content-Type: application/json
+Accept: application/json
+
+{
+  "groupId": {{groupId}},
+  "userId": {{secondUserId}},
+  "latitude": {{destinationLatitude}},
+  "longitude": {{destinationLongitude}},
+  "accuracyMeters": 5.0
+}
+
+### Retrieve group locations — 200, statuses ACTIVE / STALE / MISSING
+# يعرض مواقع أعضاء المجموعة وحالتها: ACTIVE موقع حديث، وSTALE موقع قديم، وMISSING موقع غير متاح أو مشاركته معطلة. النتيجة المتوقعة: 200.
+GET {{baseUrl}}/api/v1/group/{{groupId}}/locations
+Accept: application/json
+
+### Optimize stored locations — 200, no broadcast
+# يحسب أفضل نقطة التقاء باستخدام المواقع المحفوظة دون بث النتيجة. نفّذ طلبي حفظ الموقع أولًا، ثم أرسل الطلب خلال مهلة حداثة الموقع الافتراضية البالغة 120 ثانية. النتيجة المتوقعة: 200.
+# Run both location PUTs above first, within the default 120-second freshness window.
+POST {{baseUrl}}/api/v1/navigation/optimize
+Content-Type: application/json
+Accept: application/json
+
+{
+  "groupId": {{groupId}},
+  "participants": [
+    { "userId": {{userId}} },
+    { "userId": {{secondUserId}} }
+  ]
+}
+
+### Calculate and broadcast a group recommendation — 200
+# يحسب نقطة الالتقاء من المواقع المحفوظة الحديثة ويبث حدث MEETING_POINT_RECOMMENDED للمشتركين في قناة تنقل المجموعة، دون تغيير حالة الاجتماع. النتيجة المتوقعة: 200.
+# Requires fresh stored locations. Publishes MEETING_POINT_RECOMMENDED to
+# /topic/groups/{groupId}/navigation; does not change meeting lifecycle state.
+POST {{baseUrl}}/api/v1/navigation/groups/{{groupId}}/recommendation
+Content-Type: application/json
+Accept: application/json
+
+{
+  "groupId": {{groupId}},
+  "participants": [
+    { "userId": {{userId}} },
+    { "userId": {{secondUserId}} }
+  ]
+}
+
+### Recalculate and broadcast one member's GPS route — 200
+# يعيد حساب مسار عضو بين إحداثيات البداية والوجهة ويبث حدث NAVIGATION_UPDATED في قناة تنقل المجموعة. يشترط وجود عضوية المستخدم. النتيجة المتوقعة: 200.
+# Requires membership. Publishes NAVIGATION_UPDATED to the group navigation topic.
+POST {{baseUrl}}/api/v1/navigation/groups/{{groupId}}/routes
+Content-Type: application/json
+Accept: application/json
+
+{
+  "userId": {{userId}},
+  "route": {
+    "start": {
+      "latitude": {{startLatitude}},
+      "longitude": {{startLongitude}}
+    },
+    "destination": {
+      "latitude": {{destinationLatitude}},
+      "longitude": {{destinationLongitude}}
+    }
+  }
+}
+
+### Older observation is ignored — 200 with current saved location
+# يرسل موقعًا بوقت رصد أقدم للتحقق من تجاهله وإرجاع الموقع الأحدث المحفوظ دون بث تغيير. نفّذ طلب حفظ موقع العضو الأول قبل هذا الطلب. النتيجة المتوقعة: 200.
+# Run the first member's location PUT above first. No change should be broadcast.
+PUT {{baseUrl}}/api/v1/group/{{groupId}}/locations
+Content-Type: application/json
+Accept: application/json
+
+{
+  "groupId": {{groupId}},
+  "userId": {{userId}},
+  "latitude": {{destinationLatitude}},
+  "longitude": {{destinationLongitude}},
+  "accuracyMeters": 4.0,
+  "updatedAt": "2020-01-01T00:00:00Z"
+}
+
+### Unknown graph node — 404
+# يرسل معرّف عقدة غير موجود للتحقق من معالجة خطأ عدم العثور على نقطة البداية. النتيجة المتوقعة: 404.
+POST {{baseUrl}}/api/v1/navigation/route
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fromNodeId": -1,
+  "toNodeId": {{toNodeId}}
+}
+
+### Invalid coordinates — 400
+# يرسل خط عرض خارج المجال المسموح من ‎-90 إلى 90 للتحقق من رفض الإحداثيات غير الصالحة. النتيجة المتوقعة: 400.
+POST {{baseUrl}}/api/v1/navigation/map-match
+Content-Type: application/json
+Accept: application/json
+
+{
+  "latitude": 91.0,
+  "longitude": {{startLongitude}}
+}
+
+### Outside the supported graph area — 422
+# يرسل إحداثيات بعيدة عن الخريطة للتحقق من رفض مطابقتها عند تجاوز الحد الأقصى لمسافة المطابقة. النتيجة المتوقعة: 422.
+POST {{baseUrl}}/api/v1/navigation/map-match
+Content-Type: application/json
+Accept: application/json
+
+{
+  "latitude": 0.0,
+  "longitude": 0.0
+}
+
+### Empty optimization request — 400
+# يرسل قائمة مشاركين فارغة للتحقق من رفض حساب نقطة التقاء دون مشاركين. النتيجة المتوقعة: 400.
+POST {{baseUrl}}/api/v1/navigation/optimize
+Content-Type: application/json
+Accept: application/json
+
+{
+  "participants": []
+}
+
+### Stale explicit participant observation — 409
+# يرسل موقع مشارك بوقت رصد قديم للتحقق من رفض استخدام موقع تجاوز مهلة الحداثة في حساب نقطة الالتقاء. النتيجة المتوقعة: 409.
+POST {{baseUrl}}/api/v1/navigation/optimize
+Content-Type: application/json
+Accept: application/json
+
+{
+  "participants": [
+    {
+      "userId": {{userId}},
+      "latitude": {{startLatitude}},
+      "longitude": {{startLongitude}},
+      "updatedAt": "2020-01-01T00:00:00Z"
+    }
+  ]
+}
