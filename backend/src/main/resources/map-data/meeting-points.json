@@ -49,5 +49,331 @@
       546963458,
       986600413
     ]
+  },
+  {
+    "id": "mp-test-2206",
+    "name": "Test Point near Park 2206",
+    "locationId": null,
+    "nodeId": 2206,
+    "latitude": 24.9619722,
+    "longitude": 55.1524859,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      989208047,
+      989208053
+    ]
+  },
+  {
+    "id": "mp-test-1925",
+    "name": "Test Point near Park 1925",
+    "locationId": null,
+    "nodeId": 1925,
+    "latitude": 24.9595729,
+    "longitude": 55.1509556,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      992549495,
+      1000811775
+    ]
+  },
+  {
+    "id": "mp-test-2842",
+    "name": "Test Point near Al Fursan Park",
+    "locationId": null,
+    "nodeId": 2842,
+    "latitude": 24.9621229,
+    "longitude": 55.1545379,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      989208027,
+      989208030
+    ]
+  },
+  {
+    "id": "mp-test-1917",
+    "name": "Test Point near Jubilee Park",
+    "locationId": null,
+    "nodeId": 1917,
+    "latitude": 24.9575169,
+    "longitude": 55.1509387,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      989208044
+    ]
+  },
+  {
+    "id": "mp-test-4258",
+    "name": "Test Meeting Point 5",
+    "locationId": null,
+    "nodeId": 4258,
+    "latitude": 24.9662594,
+    "longitude": 55.1607065,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1001026579
+    ]
+  },
+  {
+    "id": "mp-test-185",
+    "name": "Test Meeting Point 6",
+    "locationId": null,
+    "nodeId": 185,
+    "latitude": 24.95297,
+    "longitude": 55.140574,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      986590112
+    ]
+  },
+  {
+    "id": "mp-test-1580",
+    "name": "Test Meeting Point 7",
+    "locationId": null,
+    "nodeId": 1580,
+    "latitude": 24.9529336,
+    "longitude": 55.1494903,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1001056150
+    ]
+  },
+  {
+    "id": "mp-test-3750",
+    "name": "Test Meeting Point 8",
+    "locationId": null,
+    "nodeId": 3750,
+    "latitude": 24.9538443,
+    "longitude": 55.1579741,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1001056103
+    ]
+  },
+  {
+    "id": "mp-test-4166",
+    "name": "Test Meeting Point 9",
+    "locationId": null,
+    "nodeId": 4166,
+    "latitude": 24.9623566,
+    "longitude": 55.1597638,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1001026557
+    ]
+  },
+  {
+    "id": "mp-test-889",
+    "name": "Test Meeting Point 10",
+    "locationId": null,
+    "nodeId": 889,
+    "latitude": 24.9604501,
+    "longitude": 55.1449261,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1000871592
+    ]
+  },
+  {
+    "id": "mp-test-1378",
+    "name": "Test Meeting Point 11",
+    "locationId": null,
+    "nodeId": 1378,
+    "latitude": 24.9623569,
+    "longitude": 55.1483544,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      996278495
+    ]
+  },
+  {
+    "id": "mp-test-3343",
+    "name": "Test Meeting Point 12",
+    "locationId": null,
+    "nodeId": 3343,
+    "latitude": 24.965708,
+    "longitude": 55.1567651,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1001026605
+    ]
+  },
+  {
+    "id": "mp-test-186",
+    "name": "Test Meeting Point 13",
+    "locationId": null,
+    "nodeId": 186,
+    "latitude": 24.9564577,
+    "longitude": 55.140586,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1000837822
+    ]
+  },
+  {
+    "id": "mp-test-1704",
+    "name": "Test Meeting Point 14",
+    "locationId": null,
+    "nodeId": 1704,
+    "latitude": 24.9651788,
+    "longitude": 55.1502016,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      1001045364
+    ]
+  },
+  {
+    "id": "mp-test-626",
+    "name": "Test Meeting Point 15",
+    "locationId": null,
+    "nodeId": 626,
+    "latitude": 24.9547621,
+    "longitude": 55.1434225,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      986590112,
+      1000841765
+    ]
+  },
+  {
+    "id": "mp-test-3810",
+    "name": "Test Meeting Point 16",
+    "locationId": null,
+    "nodeId": 3810,
+    "latitude": 24.9599506,
+    "longitude": 55.1581825,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      986590121
+    ]
+  },
+  {
+    "id": "mp-test-1324",
+    "name": "Test Meeting Point 17",
+    "locationId": null,
+    "nodeId": 1324,
+    "latitude": 24.9596564,
+    "longitude": 55.1477853,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      612322389
+    ]
+  },
+  {
+    "id": "mp-test-1518",
+    "name": "Test Meeting Point 18",
+    "locationId": null,
+    "nodeId": 1518,
+    "latitude": 24.9554396,
+    "longitude": 55.1492853,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      986590125,
+      1001484407
+    ]
+  },
+  {
+    "id": "mp-test-2355",
+    "name": "Test Meeting Point 19",
+    "locationId": null,
+    "nodeId": 2355,
+    "latitude": 24.9643968,
+    "longitude": 55.1529948,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      612322391,
+      1001045358
+    ]
+  },
+  {
+    "id": "mp-test-1869",
+    "name": "Test Meeting Point 20",
+    "locationId": null,
+    "nodeId": 1869,
+    "latitude": 24.9682539,
+    "longitude": 55.1507738,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": false,
+    "sourceWayIds": [
+      986600415
+    ]
   }
 ]
