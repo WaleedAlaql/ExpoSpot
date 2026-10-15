@@ -33,4 +33,6 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Intege
             Integer groupId,
             Integer userId
     );
+
+    List<GroupMember> findByGroup_IdAndLocationSharingEnabledTrue(Integer groupId);
 }
