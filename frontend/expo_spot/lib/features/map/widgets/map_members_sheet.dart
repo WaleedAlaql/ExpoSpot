@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expo_spot/core/localization/member_status_l10n.dart';
 import 'package:expo_spot/core/theme/app_colors.dart';
 import 'package:expo_spot/core/theme/app_radii.dart';
 import 'package:expo_spot/core/theme/app_typography.dart';
+import 'package:expo_spot/core/constants/api_constants.dart';
 import 'package:expo_spot/features/group/application/active_group_controller.dart';
+import 'package:expo_spot/features/navigation/application/navigation_controller.dart';
 import 'package:expo_spot/features/group/domain/group_member.dart';
 import 'package:expo_spot/features/map/widgets/reunion_plan_sheet.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +19,15 @@ class MapMembersSheet extends ConsumerWidget {
 
   final ScrollController scrollController;
 
+  /// Matches floating glass nav clearance on the home tab.
+  static double _navClearance(BuildContext context) {
+    return MediaQuery.paddingOf(context).bottom + 54;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final group = ref.watch(activeGroupProvider);
+    final navClearance = _navClearance(context);
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -89,14 +98,28 @@ class MapMembersSheet extends ConsumerWidget {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 28),
+                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 12),
                   child: _SmartReunifyButton(
                     onPressed: () async {
                       HapticFeedback.mediumImpact();
+                      final nav = ref.read(navigationControllerProvider);
+                      if (ApiConstants.navigationMode.isDemo &&
+                          nav.hasSession) {
+                        await ref
+                            .read(navigationControllerProvider.notifier)
+                            .optimize();
+                      }
+                      if (!context.mounted) return;
                       ref.read(activeGroupProvider.notifier).beginSmartReunionPlan();
                       await showReunionPlanSheet(context);
                     },
                   ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: ColoredBox(
+                  color: AppColors.surface.withValues(alpha: 0.92),
+                  child: SizedBox(height: navClearance),
                 ),
               ),
             ],
@@ -121,6 +144,12 @@ class _MemberRow extends StatelessWidget {
   }
 
   String _statusLabel(BuildContext context) {
+    final custom = member.statusLabelKey;
+    if (custom != null) return MemberStatusL10n.label(context, custom);
+
+    if (member.connection == MemberConnection.lowSignal) {
+      return MemberStatusL10n.label(context, 'status_low_battery');
+    }
     if (member.travelStatus == MemberTravelStatus.arrived) {
       return 'status_arrived'.tr();
     }
@@ -167,13 +196,17 @@ class _MemberRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  member.nameKey.tr(),
+                  member.displayName ?? member.nameKey.tr(),
                   style: AppTypography.body(context).copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   _statusLabel(context),
-                  style: AppTypography.label(context).copyWith(color: AppColors.keppelGreen),
+                  style: AppTypography.label(context).copyWith(
+                    color: member.connection == MemberConnection.lowSignal
+                        ? const Color(0xFFF5A623)
+                        : AppColors.keppelGreen,
+                  ),
                 ),
                 Text(
                   'status_last_update'.tr(

@@ -3,6 +3,7 @@ import 'package:expo_spot/core/constants/api_constants.dart';
 import 'package:expo_spot/features/auth/data/auth_api.dart';
 import 'package:expo_spot/features/auth/data/session_storage.dart';
 import 'package:expo_spot/features/auth/domain/auth_user.dart';
+import 'package:expo_spot/features/group/data/mock_expo_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authApiProvider = Provider<AuthApi>((ref) => AuthApi());
@@ -48,12 +49,11 @@ class AuthController extends StateNotifier<AuthState> {
     try {
       if (ApiConstants.useMockBackend) {
         await Future<void>.delayed(const Duration(milliseconds: 450));
-        final trimmed = username.trim();
+        final demo = MockExpoData.currentUser;
         final user = AuthUser(
-          id: 1,
-          name: trimmed,
-          email:
-              '${trimmed.toLowerCase().replaceAll(RegExp(r'\s+'), '.')}@expospot.local',
+          id: demo.id,
+          name: demo.name,
+          email: demo.email ?? 'waleed@expospot.local',
         );
         state = state.copyWith(isLoading: false, user: user, clearError: true);
         return user;
@@ -75,6 +75,42 @@ class AuthController extends StateNotifier<AuthState> {
     } on AuthApiException catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.message);
       return null;
+    } catch (_) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'error_unexpected'.tr(),
+      );
+      return null;
+    }
+  }
+
+  Future<AuthUser?> signInWithGoogle() => _signInWithSocial();
+
+  Future<AuthUser?> _signInWithSocial() async {
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      if (!ApiConstants.useMockBackend) {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: 'auth_social_coming_soon'.tr(),
+        );
+        return null;
+      }
+
+      await Future<void>.delayed(const Duration(milliseconds: 550));
+      final demo = MockExpoData.currentUser;
+      final user = AuthUser(
+        id: demo.id,
+        name: demo.name,
+        email: demo.email ?? 'waleed@expospot.local',
+      );
+      await _storage.saveSession(
+        userId: user.id,
+        userName: user.name,
+        userEmail: user.email,
+      );
+      state = state.copyWith(isLoading: false, user: user, clearError: true);
+      return user;
     } catch (_) {
       state = state.copyWith(
         isLoading: false,

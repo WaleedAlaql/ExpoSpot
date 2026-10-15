@@ -24,7 +24,7 @@ class MainShell extends ConsumerWidget {
         body: IndexedStack(
           index: index,
           children: [
-            HomeDashboardTab(userName: userName),
+            const HomeDashboardTab(),
             const MapTab(),
             ProfileTab(userName: userName),
           ],

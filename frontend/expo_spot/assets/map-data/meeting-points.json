@@ -1,0 +1,53 @@
+[
+  {
+    "id": "mp-986398789",
+    "name": "Earth Plaza",
+    "locationId": "way-986398789",
+    "nodeId": 3206,
+    "latitude": 24.957803,
+    "longitude": 55.1562148,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": true,
+    "sourceWayIds": [
+      672331632,
+      986590127
+    ]
+  },
+  {
+    "id": "mp-986398790",
+    "name": "Sea Plaza",
+    "locationId": "way-986398790",
+    "nodeId": 1081,
+    "latitude": 24.9566629,
+    "longitude": 55.1462239,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": true,
+    "sourceWayIds": [
+      546963457,
+      1000871595
+    ]
+  },
+  {
+    "id": "mp-986398791",
+    "name": "Sun Plaza",
+    "locationId": "way-986398791",
+    "nodeId": 2387,
+    "latitude": 24.9670353,
+    "longitude": 55.1530789,
+    "componentId": 1,
+    "status": "PROVISIONAL_FOR_TESTING",
+    "isOfficial": false,
+    "accessVerified": false,
+    "insidePlaza": true,
+    "sourceWayIds": [
+      546963458,
+      986600413
+    ]
+  }
+]

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -98,16 +99,21 @@ public class DemoSimulationService {
                 .filter(e -> e.getValue() > 0).sorted(Map.Entry.<Long, Double>comparingByValue().thenComparing(Map.Entry.comparingByKey()))
                 .map(Map.Entry::getKey).toList();
         if (nodes.size() < count) throw new NavigationException(422, "Not enough reachable nodes to spawn visitors");
+        List<Long> pool = new ArrayList<>(nodes);
+        Collections.shuffle(pool, ThreadLocalRandom.current());
         List<Walker> visitors = new ArrayList<>();
         Set<Long> used = new HashSet<>();
         for (int i = 0; i < count; i++) {
-            int offset = (int) ((i + 1.0) / (count + 1) * (nodes.size() - 1));
             Long selected = null;
-            for (int j = 0; j < nodes.size(); j++) {
-                Long nodeId = nodes.get((offset + j) % nodes.size());
+            for (Long nodeId : pool) {
                 if (used.contains(nodeId)) continue;
-                try { routing.route(nodeId, candidate.nodeId()); selected = nodeId; break; }
-                catch (NavigationException e) { if (e.getStatus() != 422) throw e; }
+                try {
+                    routing.route(nodeId, candidate.nodeId());
+                    selected = nodeId;
+                    break;
+                } catch (NavigationException e) {
+                    if (e.getStatus() != 422) throw e;
+                }
             }
             if (selected == null) throw new NavigationException(422, "Not enough nodes can reach the meeting point");
             used.add(selected);

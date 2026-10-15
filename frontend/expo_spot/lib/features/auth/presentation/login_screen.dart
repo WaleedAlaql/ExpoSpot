@@ -7,6 +7,7 @@ import 'package:expo_spot/core/widgets/warm_cream_background.dart';
 import 'package:expo_spot/features/auth/application/auth_controller.dart';
 import 'package:expo_spot/features/auth/presentation/widgets/expo_text_field.dart';
 import 'package:expo_spot/features/auth/presentation/widgets/login_primary_button.dart';
+import 'package:expo_spot/features/auth/presentation/widgets/login_social_button.dart';
 import 'package:expo_spot/features/shell/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
@@ -76,10 +77,67 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
     if (!mounted || user == null) return;
 
+    _goHome(user.name);
+  }
+
+  void _goHome(String userName) {
     Navigator.of(context).pushAndRemoveUntil(
-      FadeScaleRoute(page: MainShell(userName: user.name)),
+      FadeScaleRoute(page: MainShell(userName: userName)),
       (route) => false,
     );
+  }
+
+  Future<void> _signInWithGoogle() async {
+    final user = await ref.read(authControllerProvider.notifier).signInWithGoogle();
+    if (!mounted || user == null) return;
+    _goHome(user.name);
+  }
+
+  Future<void> _showForgotPassword() async {
+    final emailController = TextEditingController(
+      text: _usernameController.text.trim(),
+    );
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('forgot_password_title'.tr()),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'forgot_password_sub'.tr(),
+              style: AppTypography.body(context).copyWith(
+                color: AppColors.textMuted,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ExpoTextField(
+              label: 'username'.tr(),
+              controller: emailController,
+              prefixIcon: Icons.alternate_email_rounded,
+              textInputAction: TextInputAction.done,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text('cancel'.tr()),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('forgot_password_sent'.tr())),
+              );
+            },
+            child: Text('forgot_password_send'.tr()),
+          ),
+        ],
+      ),
+    );
+    emailController.dispose();
   }
 
   @override
@@ -98,24 +156,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                 children: [
                   const SizedBox(height: 8),
                   Center(
-                    child: Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: AppColors.keppelGreen,
-                        borderRadius: BorderRadius.circular(22),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.keppelGreen.withValues(alpha: 0.35),
-                            blurRadius: 18,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.location_on_rounded,
-                        color: Colors.white,
-                        size: 36,
+                    child: Text(
+                      'ExpoSpot',
+                      style: AppTypography.display(context).copyWith(
+                        color: Colors.black,
+                        fontSize: 36,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.5,
+                        height: 1.1,
                       ),
                     ),
                   ),
@@ -162,7 +210,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       style: AppTypography.label(context).copyWith(color: AppColors.error),
                     ),
                   ],
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: TextButton(
+                      onPressed: auth.isLoading ? null : _showForgotPassword,
+                      child: Text(
+                        'forgot_password'.tr(),
+                        style: AppTypography.label(context).copyWith(
+                          color: AppColors.keppelGreen,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
                       Checkbox(
@@ -176,7 +238,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                           setState(() => _rememberMe = value ?? true);
                         },
                       ),
-                      Text('remember_me'.tr(), style: AppTypography.body(context)),
+                      Expanded(
+                        child: Text(
+                          'remember_me'.tr(),
+                          style: AppTypography.body(context),
+                        ),
+                      ),
                     ],
                   ),
                   if (auth.errorMessage != null) ...[
@@ -192,6 +259,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     label: 'login'.tr(),
                     isLoading: auth.isLoading,
                     onPressed: _submit,
+                  ),
+                  const SizedBox(height: 22),
+                  Row(
+                    children: [
+                      Expanded(child: Divider(color: AppColors.border)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text(
+                          'login_or_continue'.tr(),
+                          style: AppTypography.label(context).copyWith(
+                            color: AppColors.textMuted,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      Expanded(child: Divider(color: AppColors.border)),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  GoogleSignInButton(
+                    label: 'sign_in_google'.tr(),
+                    isLoading: auth.isLoading,
+                    onPressed: _signInWithGoogle,
                   ),
                 ],
               ),

@@ -8,6 +8,8 @@ import 'package:expo_spot/core/widgets/expo_mesh_background.dart';
 import 'package:expo_spot/core/widgets/glass_panel.dart';
 import 'package:expo_spot/features/auth/application/auth_controller.dart';
 import 'package:expo_spot/features/auth/presentation/login_screen.dart';
+import 'package:expo_spot/features/group/data/mock_group_repository.dart';
+import 'package:expo_spot/features/group/widgets/past_groups_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,76 +72,96 @@ class ProfileTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final backendUser = ref.watch(currentUserModelProvider);
+    final displayName = backendUser.name.isNotEmpty ? backendUser.name : userName;
     final languageLabel = context.locale.languageCode == 'ar'
         ? 'language_ar'.tr()
         : 'language_en'.tr();
 
     return ExpoMeshBackground(
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 120),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'profile_title'.tr(),
-                style: AppTypography.display(context).copyWith(fontSize: 26),
-              ),
-              const SizedBox(height: 16),
-              const LanguageSwitcher(),
-              const SizedBox(height: 16),
-              GlassPanel(
-                child: Row(
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Container(
-                      width: 56,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [
-                            AppColors.keppelGreen.withValues(alpha: 0.9),
-                            AppColors.bottleGreen,
-                          ],
-                        ),
-                      ),
-                      child: const Icon(Icons.person, color: Colors.white, size: 28),
+                    Text(
+                      'profile_title'.tr(),
+                      style: AppTypography.display(context).copyWith(fontSize: 26),
                     ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(height: 16),
+                    const LanguageSwitcher(),
+                    const SizedBox(height: 16),
+                    GlassPanel(
+                      child: Row(
                         children: [
-                          Text(
-                            userName,
-                            style: AppTypography.body(context).copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.keppelGreen.withValues(alpha: 0.9),
+                                  AppColors.bottleGreen,
+                                ],
+                              ),
                             ),
+                            child: const Icon(Icons.person, color: Colors.white, size: 28),
                           ),
-                          Text(
-                            'profile_expo_tag'.tr(),
-                            style: AppTypography.englishMetric(context),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  displayName,
+                                  style: AppTypography.body(context).copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                if (backendUser.email != null)
+                                  Text(
+                                    backendUser.email!,
+                                    style: AppTypography.label(context).copyWith(
+                                      color: AppColors.textMuted,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                Text(
+                                  'profile_expo_tag'.tr(),
+                                  style: AppTypography.englishMetric(context),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
+                    const SizedBox(height: 16),
+                    _ProfileRow(icon: Icons.notifications_outlined, label: 'notifications'.tr()),
+                    const SizedBox(height: 10),
+                    _ProfileRow(
+                      icon: Icons.language_rounded,
+                      label: '${'language_setting'.tr()} · $languageLabel',
+                    ),
+                    const SizedBox(height: 10),
+                    _ProfileRow(icon: Icons.shield_outlined, label: 'privacy'.tr()),
+                    const SizedBox(height: 24),
+                    const PastGroupsSection(),
+                    const SizedBox(height: 24),
+                    _LogoutButton(onPressed: () => _confirmLogout(context, ref)),
+                    const SizedBox(height: 120),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              _ProfileRow(icon: Icons.notifications_outlined, label: 'notifications'.tr()),
-              const SizedBox(height: 10),
-              _ProfileRow(
-                icon: Icons.language_rounded,
-                label: '${'language_setting'.tr()} · $languageLabel',
-              ),
-              const SizedBox(height: 10),
-              _ProfileRow(icon: Icons.shield_outlined, label: 'privacy'.tr()),
-              const Spacer(),
-              _LogoutButton(onPressed: () => _confirmLogout(context, ref)),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

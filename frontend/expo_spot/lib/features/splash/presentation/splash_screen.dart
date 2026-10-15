@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expo_spot/core/routing/spring_slide_route.dart';
-import 'package:expo_spot/core/theme/app_typography.dart';
 import 'package:expo_spot/features/auth/presentation/login_screen.dart';
 import 'package:expo_spot/features/splash/widgets/floating_expo_showcase.dart';
 import 'package:expo_spot/features/splash/widgets/onboarding_organic_background.dart';
@@ -58,28 +57,16 @@ class _SplashScreenState extends State<SplashScreen>
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
               child: Column(
                 children: [
-                  const SizedBox(height: 12),
-                  FloatingExpoShowcase(animation: _controller),
-                  const Spacer(),
-                  Text(
-                    'onboarding_title'.tr(),
-                    textAlign: TextAlign.center,
-                    style: AppTypography.display(context).copyWith(
-                      color: Colors.white,
-                      fontSize: 26,
-                      height: 1.35,
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SingleChildScrollView(
+                        child: FloatingExpoShowcase(animation: _controller),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'onboarding_subtitle'.tr(),
-                    textAlign: TextAlign.center,
-                    style: AppTypography.subtitle(context).copyWith(
-                      color: Colors.white.withValues(alpha: 0.82),
-                      height: 1.55,
-                    ),
-                  ),
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 20),
                   OnboardingWhiteCta(
                     label: 'sign_in_cta'.tr(),
                     onPressed: _openLogin,

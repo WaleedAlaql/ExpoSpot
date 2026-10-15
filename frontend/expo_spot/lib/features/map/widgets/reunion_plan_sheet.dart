@@ -87,7 +87,7 @@ class _ReunionPlanSheet extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
                         'member_eta'.tr(namedArgs: {
-                          'name': member.nameKey.tr(),
+                          'name': member.displayName ?? member.nameKey.tr(),
                           'minutes': '$eta',
                         }),
                         style: AppTypography.body(context).copyWith(
