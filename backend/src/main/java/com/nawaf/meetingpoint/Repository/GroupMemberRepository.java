@@ -27,16 +27,9 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Intege
     @org.springframework.data.jpa.repository.Query("select distinct m.group.id from GroupMember m where m.locationSharingEnabled = true")
     java.util.List<Integer> findSharingGroupIds();
 
-}
-
     List<GroupMember> findByGroup_Id(Integer groupId);
 
     Optional<GroupMember> findByGroup_IdAndUser_Id(
-            Integer groupId,
-            Integer userId
-    );
-
-    boolean existsByGroup_IdAndUser_Id(
             Integer groupId,
             Integer userId
     );
