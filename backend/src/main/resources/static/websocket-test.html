@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ExpoSpot STOMP Test</title>
+</head>
+<body>
+<h2>ExpoSpot WebSocket / STOMP</h2>
+<button id="connect">Connect</button>
+<button id="disconnect">Disconnect</button>
+<pre id="log"></pre>
+
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+<script>
+    let client;
+    const log = (message) => {
+        document.getElementById("log").textContent += message + "\n";
+    };
+
+    document.getElementById("connect").onclick = () => {
+        if (client?.active) return;
+
+        client = new StompJs.Client({
+            brokerURL: "ws://localhost:8080/ws",
+            reconnectDelay: 0,
+            debug: message => console.log(message),
+
+            onConnect: () => {
+                log("STOMP CONNECTED");
+
+                client.subscribe("/topic/test", message => {
+                    log("RECEIVED: " + message.body);
+                });
+
+                log("SUBSCRIBED: /topic/test");
+            },
+
+            onStompError: frame => {
+                log("STOMP ERROR: " + frame.headers.message);
+            },
+
+            onWebSocketError: error => {
+                log("WEBSOCKET ERROR");
+                console.error(error);
+            },
+
+            onWebSocketClose: () => {
+                log("WEBSOCKET CLOSED");
+            }
+        });
+
+        client.activate();
+    };
+
+    document.getElementById("disconnect").onclick = () => {
+        if (client) client.deactivate();
+    };
+</script>
+</body>
+</html>
