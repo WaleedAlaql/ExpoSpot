@@ -4,6 +4,9 @@ import com.nawaf.meetingpoint.Model.GroupMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Integer> {
     // Explicit SQL keeps row locking compatible with both MySQL and MariaDB.
@@ -24,4 +27,17 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Intege
     @org.springframework.data.jpa.repository.Query("select distinct m.group.id from GroupMember m where m.locationSharingEnabled = true")
     java.util.List<Integer> findSharingGroupIds();
 
+}
+
+    List<GroupMember> findByGroup_Id(Integer groupId);
+
+    Optional<GroupMember> findByGroup_IdAndUser_Id(
+            Integer groupId,
+            Integer userId
+    );
+
+    boolean existsByGroup_IdAndUser_Id(
+            Integer groupId,
+            Integer userId
+    );
 }
