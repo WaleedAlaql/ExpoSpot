@@ -21,14 +21,16 @@ public class UserService {
 
     // 0 = User created successfully
     // 1 = Email already exists
-    public void createUser(User user) {
+    public User createUser(User user) {
         User existEmail = userRepository.findUserByEmail(user.getEmail());
 
         if (existEmail != null) throw new ApiException("Email already exists");
 
-        userRepository.save(user);
+        User saved = userRepository.save(user);
 
-        emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+        emailService.sendWelcomeEmail(saved.getEmail(), saved.getName());
+
+        return saved;
     }
 
     // 0 = User updated successfully,
@@ -45,6 +47,9 @@ public class UserService {
 
         foundUser.setName(user.getName());
         foundUser.setEmail(user.getEmail());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            foundUser.setPassword(user.getPassword());
+        }
 
         userRepository.save(foundUser);
     }

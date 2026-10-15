@@ -1,0 +1,64 @@
+---
+description: ExpoSpot (إكسبو سبوت) — product identity, design tokens, motion, Flutter architecture
+alwaysApply: true
+---
+
+# ExpoSpot (إكسبو سبوت) - Cursor Rules & AI Guidelines
+
+## Project Identity & Context
+- **Project Name:** ExpoSpot (إكسبو سبوت)
+- **Purpose:** Smart Group Reunification App for Expo 2030 Riyadh.
+- **Tech Stack:** Flutter (Frontend), Spring Boot (Backend), MapLibre/FlutterMap, Riverpod (State Management).
+- **Core Experience:** Map-First, Real-time Group Tracking, Smart Reunification Point Calculation, Low-connectivity handling.
+
+---
+
+## Design System & Expo Visual Identity Tokens
+- **Primary / Bottle Green:** `#041C17` (Used for primary buttons, dark background elements, top headers).
+- **Accent / Keppel Green:** `#34B78F` (Used for active states, callouts, success indicators, route highlights).
+- **Background Color:** `#F7FAF8` (App soft light background).
+- **Surface / Card Color:** `#FFFFFF` (Cards, BottomSheets, Dialogs).
+- **Border Color:** `#DCE7E1` (Subtle 1px boundaries).
+- **Radius Tokens:** Card/Sheet Radius: `16.0`, Button Radius: `14.0`, Badge Radius: `8.0`.
+- **Typography:** `IBM Plex Sans Arabic` for Arabic UI, `Inter` for English & Numerical data.
+- **Accessibility:** Strict WCAG AA contrast compliance. All text must be easily readable over dark and light surfaces.
+
+---
+
+## High-Taste & Principles (Inspired by Impeccable, Emil Kowalski & Apple Design)
+1. **Stop Slop & Keep it Minimal:**
+   - Avoid generic, bloated, or overly decorative UI components.
+   - Every element, animation, or padding must serve a clear function in group reunification.
+2. **Micro-Interactions & Motion (Emil Kowalski Style):**
+   - Use smooth spring physics for BottomSheet transitions (`Curves.fastOutSlowIn` or `CurvedAnimation`).
+   - Add subtle feedback (haptics) on key actions like sending a reunification request or tapping a map point.
+   - Smooth status transitions when an accent state changes (e.g., status changing from "في الطريق" to "وصلت").
+3. **Map-First Layout:**
+   - The map occupies 100% of the screen context.
+   - Floating overlays, cards, and BottomSheets use subtle backdrop blurs (`BackdropFilter` with glassmorphism touches) and clean borders.
+4. **RTL & Arabic-First Architecture:**
+   - Always wrap screens with correct Directionality (`TextDirection.rtl`).
+   - Ensure proper spatial alignment for Arabic headers, icons, and list items.
+
+---
+
+## Code Quality & Flutter Architecture Rules
+1. **Clean Architecture / Feature-First Folder Structure:**
+   ```text
+   lib/
+   ├── core/
+   │   ├── theme/          # AppColors, AppTheme, Typography
+   │   ├── constants/      # API endpoints, Asset paths
+   │   └── utils/          # Location helpers, formatting
+   └── features/
+       ├── map/            # Map view, markers, overlays
+       ├── group/          # Create/Join group, QR scanner
+       └── reunification/  # Point suggestion, routes, ETA
+   ```
+
+---
+
+## Map & Expo Demo Environment Guidelines
+- **Map Engine:** Use `flutter_map` with OpenStreetMap (100% free, no API keys or credit cards required).
+- **Expo Demo Data:** The app uses reference Expo map data (such as historical Expo layouts) to simulate the venue environment, display scattered user markers, and calculate smart reunification points.
+- **Cost Policy:** Absolutely NO paid APIs or third-party services requiring subscriptions (Free tier only).

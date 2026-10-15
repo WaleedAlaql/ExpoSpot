@@ -6,7 +6,6 @@ import com.nawaf.meetingpoint.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,10 +21,9 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
-        userService.createUser(user);
-
-        return ResponseEntity.status(201).body(new ApiResponse("Created new user successfully"));
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+        User saved = userService.createUser(user);
+        return ResponseEntity.status(201).body(saved);
     }
 
     @PutMapping("/update/{id}")
