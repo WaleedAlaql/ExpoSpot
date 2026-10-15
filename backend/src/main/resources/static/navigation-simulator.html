@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExpoSpot · Navigation lab</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1117;--panel:#121c25;--line:#263441;--muted:#91a4b4;--text:#e8f0f5;--mint:#8be6be;--gold:#ffd184}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:1px solid #354756;border-radius:8px;padding:9px 13px;background:#1b2b38;color:var(--text);font-weight:600}button:hover:not(:disabled){background:#2b4051}button:disabled{opacity:.35;cursor:not-allowed}button.primary{background:var(--mint);color:#0c3527;border-color:var(--mint)}button.primary:hover:not(:disabled){background:#b4f6d7}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--mint);outline-offset:3px}input,select{background:#0d1720;border:1px solid var(--line);border-radius:7px;padding:8px;color:var(--text);min-width:0}header{padding:23px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:20px}.brand{display:flex;gap:13px;align-items:center}.mark{background:var(--mint);color:#133929;border-radius:13px;width:43px;height:43px;display:grid;place-items:center;font-size:24px;font-weight:800}h1{font-size:20px;letter-spacing:-.6px;margin:0}p{margin:4px 0}.eyebrow{font-size:10px;letter-spacing:2px;color:var(--mint);text-transform:uppercase;font-weight:700}.muted{color:var(--muted)}.status{font-size:12px;border:1px solid var(--line);padding:7px 11px;border-radius:20px;white-space:nowrap}.status.live{color:var(--mint)}.status.offline{color:var(--gold)}main{padding:22px 30px;max-width:1800px;margin:auto}.session{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:16px}.session input{width:320px;font:12px ui-monospace,monospace}.session label{font-size:12px;color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden}.toolbar{padding:13px 15px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-bottom:1px solid var(--line)}.toolbar label{color:var(--muted);font-size:12px}.map-wrap{position:relative;height:530px;background:#0c1720}canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}.map-caption{position:absolute;top:14px;left:16px;pointer-events:none;background:#101d28dc;border:1px solid var(--line);padding:8px 12px;border-radius:9px;font-size:12px}.map-caption strong{display:block;color:var(--mint)}.map-buttons{position:absolute;right:12px;top:12px;display:grid;gap:7px}.legend{display:flex;flex-wrap:wrap;gap:18px;padding:12px 16px;color:var(--muted);font-size:11px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-right:6px}.diamond{border-radius:1px;transform:rotate(45deg)}.controls{padding:16px;border-top:1px solid var(--line)}.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.speed{display:grid;grid-template-columns:1fr 80px;gap:10px;margin-top:14px;align-items:center}.speed input{width:100%}.speed label{font-size:12px;color:var(--muted)}.small{font-size:11px}.section-title{font-size:11px;text-transform:uppercase;letter-spacing:1.6px;color:var(--muted);margin:0 0 13px}.side-section{padding:18px;border-bottom:1px solid var(--line)}.destination{font-size:22px;font-weight:600;letter-spacing:-.6px;margin-bottom:5px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.metric strong{font-size:20px;display:block;font-weight:500}.metric span{color:var(--muted);font-size:11px}.visitor{display:block;text-align:left;width:100%;padding:11px;margin-top:8px;background:#0e1821;border:1px solid var(--line);border-left:3px solid var(--visitor-color)}.visitor.selected{background:#22323f;border-color:var(--visitor-color)}.visitor-top{display:flex;justify-content:space-between;align-items:center}.visitor small{color:var(--muted);font-weight:400}.badge{font-size:9px;letter-spacing:.6px;color:var(--mint)}.progress{height:3px;background:#263440;border-radius:3px;margin:8px 0}.progress div{height:100%;background:var(--visitor-color);border-radius:3px}.details{font-size:12px;color:var(--muted);line-height:1.8;overflow-wrap:anywhere}.details strong{color:var(--text);font-weight:500}.route-lab{margin-top:18px;padding:17px}.route-lab input{width:130px}.route-lab h2{font-size:14px;margin:0 0 10px}.route-lab label{font-size:12px;color:var(--muted)}.route-result{font-size:12px;color:var(--mint);margin-top:10px;min-height:18px}.log-panel{margin-top:18px}.log-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}.log-head h2{font-size:13px;margin:0}.log{height:155px;overflow:auto;padding:10px 16px;font:11px/1.9 ui-monospace,SFMono-Regular,monospace;color:var(--muted)}.log .error{color:#ff9c9c}.log .ws{color:var(--mint)}.log time{color:#637b8e;margin-right:12px}.notice{padding:10px 14px;border:1px solid #8f4848;background:#361e24;color:#ffc4c4;border-radius:9px;margin-bottom:14px}.notice[hidden]{display:none}footer{color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:12px;margin-top:18px}a{color:var(--mint)}@media(max-width:1000px){.layout{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr}.map-wrap{height:480px}}@media(max-width:600px){header,main{padding:16px}.brand .muted{display:none}.sidebar{display:block}.map-wrap{height:380px}.session input{width:100%}.session{align-items:stretch}.metrics{gap:7px}footer{display:block}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="mark">E</div><div><div class="eyebrow">ExpoSpot / Developer playground</div><h1>Navigation lab</h1><p class="muted small">Real paths. Virtual visitors. One shared meeting point.</p></div></div><span id="connection" class="status offline" role="status">● Connecting</span></header>
+<main>
+<div id="notice" class="notice" role="alert" hidden></div>
+<div class="session"><label for="sessionId">SIMULATION</label><input id="sessionId" placeholder="Create or paste a simulation ID" spellcheck="false"><button id="join">Join</button><button id="newSession">New simulation</button><button id="copyLink">Copy shared link</button><span id="simulationStatus" class="muted small">No session</span></div>
+<div class="layout">
+<section>
+<div class="panel">
+<div class="toolbar"><button id="loadGraph">Load Graph</button><label for="visitorCount">Visitors</label><select id="visitorCount"><option value="3">3 visitors</option><option value="4">4 visitors</option></select><button id="spawn">Spawn Visitors</button><button id="optimize" class="primary">Find Best Meeting Point</button><button id="calculate">Calculate Routes</button></div>
+<div class="map-wrap"><canvas id="map" aria-label="Venue graph, visitor positions and walking routes. Use the node inputs below for keyboard-accessible routing."></canvas><div class="map-caption"><strong id="graphSummary">Load the venue graph to begin</strong><span id="mapHint">Scroll to zoom · drag to pan · click a visitor to inspect</span></div><div class="map-buttons"><button id="zoomIn" aria-label="Zoom in">+</button><button id="zoomOut" aria-label="Zoom out">−</button><button id="fit">Fit</button></div></div>
+<div class="legend"><span><i class="dot" style="background:#486274"></i>Walkable graph</span><span><i class="dot diamond"></i>Meeting candidate</span><span><i class="dot" style="background:var(--mint)"></i>Selected meeting point</span><span>Colored lines = backend walking routes</span></div>
+<div class="controls"><div class="row"><button id="start" class="primary">▶ Start Simulation</button><button id="pause">Ⅱ Pause</button><button id="recalculate">Recalculate Meeting Point</button><button id="reset">Reset</button></div><div class="speed"><label for="speed">Simulated walking speed <span class="muted small">· 1.4 m/s is a normal walk; higher values accelerate the demo</span></label><input id="speed" type="number" min="0.2" max="100" step="0.2" value="1.4" aria-label="Simulated walking speed in meters per second"></div><p class="muted small">The server advances visitors along returned route segments. All connected tabs share pause, speed and arrival state.</p></div>
+</div>
+<div class="panel route-lab"><h2>Point-to-point route explorer</h2><div class="row"><label for="fromNode">Start node</label><input id="fromNode" type="number" placeholder="Node ID"><button id="pickStart">Pick on map</button><label for="toNode">End node</label><input id="toNode" type="number" placeholder="Node ID"><button id="pickEnd">Pick on map</button><button id="explore">Find Route</button><button id="clearRoute">Clear</button></div><div id="routeResult" class="route-result" role="status">Choose two nodes. Disconnected paths return a visible backend error.</div></div>
+</section>
+<aside class="panel sidebar">
+<div class="side-section"><h2 class="section-title">Meeting recommendation</h2><div id="destination" class="destination">Where shall we meet?</div><p id="destinationMeta" class="muted small">Spawn visitors, then let the backend minimize the longest walking time.</p><div class="metrics"><div class="metric"><strong id="maxEta">—</strong><span>Maximum ETA · backend speed</span></div><div class="metric"><strong id="totalDistance">—</strong><span>Total route distance at selection</span></div><div class="metric"><strong id="remaining">—</strong><span>Remaining distance · all visitors</span></div><div class="metric"><strong id="simEta">—</strong><span>Maximum ETA · simulated speed</span></div></div></div>
+<div class="side-section"><h2 class="section-title">Virtual visitors</h2><div id="visitors"><p class="muted small">No users or group registration needed.</p></div></div>
+<div class="side-section"><h2 class="section-title">Selected visitor</h2><div id="visitorDetails" class="details">Select a visitor marker or card to inspect their position and journey.</div></div>
+</aside>
+</div>
+<div class="panel log-panel"><div class="log-head"><h2>Live event stream <span id="eventCount" class="muted small">0 messages</span></h2><button id="clearLog">Clear log</button></div><div id="log" class="log" role="log" aria-live="off"></div></div>
+<footer><span>Isolated in-memory demo · No database records created · Graph works entirely offline</span><span>Venue geometry comes from the current dataset; it is not a verified Riyadh map.</span></footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const palette = ['#8be6be','#83b9ff','#ffb68d','#d4a3ff'];
+const base = '/api/v1/demo/navigation/simulations';
+let graph, nodeMap = new Map(), state, selected = 1, busy = false, sessionId = '';
+let socket, connected = false, reconnectTimer, socketGeneration = 0, messageCount = 0;
+let refreshing = false, pickMode = '', explorerRoute = null;
+let transform = {scale:1,x:0,y:0}, baseScale = 1, projection = {lat:0,lon:0,cos:1};
+const canvas = $('map'), ctx = canvas.getContext('2d');
+let width = 1, height = 1, graphLayer = document.createElement('canvas');
+function log(message, type='') {
+  const line = document.createElement('div'); line.className = type;
+  const time = document.createElement('time'); time.textContent = new Date().toLocaleTimeString();
+  line.append(time, document.createTextNode(message)); $('log').prepend(line);
+  while ($('log').children.length > 100) $('log').lastChild.remove();
+}
+function error(e) { $('notice').textContent = e.message || String(e); $('notice').hidden = false; log($('notice').textContent,'error'); }
+async function api(url, body) {
+  const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 20000);
+  try {
+    const response = await fetch(url, {method:body === undefined ? 'GET' : 'POST',
+      headers:body === undefined ? {} : {'Content-Type':'application/json'},
+      body:body === undefined ? undefined : JSON.stringify(body), signal:controller.signal});
+    const text = await response.text(); let result;
+    try { result = JSON.parse(text); } catch { throw new Error(`HTTP ${response.status}: unexpected server response`); }
+    if (!response.ok) throw new Error(result.message || `HTTP ${response.status}`);
+    return result;
+  } finally { clearTimeout(timeout); }
+}
+async function run(fn) {
+  if (busy) return;
+  busy = true; $('notice').hidden = true; controls();
+  try { await fn(); } catch(e) { error(e); }
+  finally { busy = false; controls(); }
+}
+function controls() {
+  const ready = !!state, visitors = !!state?.visitors.length, routes = visitors && state.visitors.every(v => v.path?.length);
+  for (const id of ['loadGraph','newSession','join']) $(id).disabled = busy;
+  $('spawn').disabled = busy || !ready || !graph;
+  $('optimize').disabled = $('recalculate').disabled = busy || !visitors;
+  $('calculate').disabled = busy || !state?.meetingPoint;
+  $('start').disabled = busy || !routes || state?.status === 'RUNNING' || state?.status === 'ARRIVED';
+  $('pause').disabled = busy || state?.status !== 'RUNNING';
+  $('reset').disabled = busy || !ready;
+  $('speed').disabled = busy || !ready;
+  $('explore').disabled = busy || !graph;
+  $('pickStart').disabled = $('pickEnd').disabled = !graph;
+  $('copyLink').disabled = !ready;
+}
+function distance(n) { return n >= 1000 ? (n/1000).toFixed(2)+' km' : Math.round(n)+' m'; }
+function duration(n) { return n < 60 ? Math.ceil(n)+' s' : Math.floor(n/60)+'m '+Math.ceil(n%60)+'s'; }
+function apply(next) {
+  if (next.simulationId !== sessionId || (state && next.revision < state.revision)) return;
+  if (next.visitors.some(v => v.path === null) && (!state || next.routeRevision !== state.routeRevision)) { refresh(); return; }
+  const previous = new Map((state?.visitors || []).map(v => [v.id,v]));
+  next.visitors = next.visitors.map(v => ({...v,path:v.path === null ? previous.get(v.id)?.path || [] : v.path}));
+  state = next; if (!state.visitors.some(v => v.id === selected)) selected = state.visitors[0]?.id;
+  renderDetails(); draw(); controls();
+}
+async function refresh() {
+  if (!sessionId || refreshing) return;
+  const id = sessionId; refreshing = true;
+  try { const result = await api(`${base}/${encodeURIComponent(id)}`); if (sessionId === id) apply(result); }
+  catch(e) { error(e); } finally { refreshing = false; }
+}
+async function attach(next) {
+  sessionId = next.simulationId; state = null; explorerRoute = null;
+  $('sessionId').value = sessionId;
+  const url = new URL(location.href); url.searchParams.set('simulation',sessionId); history.replaceState(null,'',url);
+  apply(next); connect(); log('Joined isolated simulation '+sessionId);
+}
+async function command(action, extra={}) {
+  const id = sessionId;
+  const result = await api(`${base}/${encodeURIComponent(id)}/commands`,{action,...extra});
+  if (sessionId === id) apply(result);
+  log(`REST ${action} → ${result.status}`);
+}
+async function loadGraph() {
+  graph = await api('/api/v1/navigation/graph'); nodeMap = new Map(graph.nodes.map(n => [n.id,n]));
+  projection.lat = graph.nodes.reduce((s,n) => s+n.latitude,0)/graph.nodes.length;
+  projection.lon = graph.nodes.reduce((s,n) => s+n.longitude,0)/graph.nodes.length;
+  projection.cos = Math.cos(projection.lat*Math.PI/180);
+  $('graphSummary').textContent = `${graph.nodes.length.toLocaleString()} nodes · ${graph.edges.length.toLocaleString()} walking edges`;
+  $('fromNode').value = graph.meetingPoints[0]?.nodeId || graph.nodes[0].id;
+  $('toNode').value = graph.meetingPoints[1]?.nodeId || graph.nodes.at(-1).id;
+  fit(); log(`Graph loaded: ${graph.meetingPoints.length} meeting candidates`);
+}
+function renderDetails() {
+  if (!state) return;
+  $('simulationStatus').textContent = state.status.toLowerCase()+' · revision '+state.revision;
+  if (document.activeElement !== $('speed')) $('speed').value = state.speed;
+  $('destination').textContent = state.meetingPoint?.name || 'Where shall we meet?';
+  $('destinationMeta').textContent = state.meetingPoint ? `Node ${state.meetingPoint.nodeId} · ${state.meetingPoint.latitude.toFixed(6)}, ${state.meetingPoint.longitude.toFixed(6)}` : 'Spawn visitors, then find the fairest meeting point.';
+  $('maxEta').textContent = state.optimizerMaxEtaSeconds == null ? '—' : duration(state.optimizerMaxEtaSeconds);
+  $('totalDistance').textContent = state.optimizerTotalDistanceMeters == null ? '—' : distance(state.optimizerTotalDistanceMeters);
+  const hasRoutes = state.visitors.some(v => v.path.length);
+  $('remaining').textContent = hasRoutes ? distance(state.visitors.reduce((s,v) => s+v.remainingMeters,0)) : '—';
+  $('simEta').textContent = hasRoutes ? duration(Math.max(...state.visitors.map(v => v.etaSeconds))) : '—';
+  $('visitors').replaceChildren();
+  if (!state.visitors.length) $('visitors').textContent = 'Spawn three or four visitors to begin.';
+  for (const v of state.visitors) {
+    const button = document.createElement('button'); button.className = 'visitor'+(selected === v.id ? ' selected' : '');
+    button.style.setProperty('--visitor-color',palette[v.id-1]); button.setAttribute('aria-pressed',String(selected === v.id));
+    const top = document.createElement('div'); top.className = 'visitor-top';
+    const name = document.createElement('span'); name.textContent = v.name;
+    const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = v.status;
+    top.append(name,badge);
+    const progress = document.createElement('div'); progress.className = 'progress';
+    const bar = document.createElement('div'); bar.style.width = (v.distanceMeters ? 100*(1-v.remainingMeters/v.distanceMeters) : v.status === 'ARRIVED' ? 100 : 0)+'%'; progress.append(bar);
+    const detail = document.createElement('small'); detail.textContent = v.path.length ? `${distance(v.remainingMeters)} remaining · ${duration(v.etaSeconds)}` : 'Waiting for a route';
+    button.append(top,progress,detail); button.onclick = () => { selected = v.id; renderDetails(); draw(); };
+    $('visitors').append(button);
+  }
+  const v = state.visitors.find(v => v.id === selected); $('visitorDetails').replaceChildren();
+  if (!v) { $('visitorDetails').textContent = 'Select a visitor marker or card to inspect their journey.'; return; }
+  const fields = [['Visitor',v.name+' · temporary ID '+v.id],['Position',v.position],['Latitude',v.latitude.toFixed(7)],['Longitude',v.longitude.toFixed(7)],['Destination',state.meetingPoint?.name || 'Not selected'],['Route',v.path.length ? distance(v.distanceMeters) : 'Not assigned'],['Remaining',v.path.length ? distance(v.remainingMeters) : '—'],['ETA',v.path.length ? duration(v.etaSeconds) : '—']];
+  for (const [label,value] of fields) { const row = document.createElement('div'); row.append(document.createTextNode(label+': ')); const strong = document.createElement('strong'); strong.textContent = value; row.append(strong); $('visitorDetails').append(row); }
+}
+// Only rendering and selection happen here; all paths and recommendations come from Spring.
+function world(p) { return {x:(p.longitude-projection.lon)*111195*projection.cos,y:-(p.latitude-projection.lat)*111195}; }
+function screen(p) { const w = world(p); return {x:w.x*transform.scale+transform.x,y:w.y*transform.scale+transform.y}; }
+function resize() {
+  const rect = canvas.getBoundingClientRect(); width = rect.width; height = rect.height;
+  const dpr = devicePixelRatio || 1; canvas.width = Math.round(width*dpr); canvas.height = Math.round(height*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+  graphLayer.width = canvas.width; graphLayer.height = canvas.height; if (graph) fit(); else draw();
+}
+function fit() {
+  if (!graph) return;
+  const points = graph.nodes.map(world); const xs = points.map(p => p.x), ys = points.map(p => p.y);
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+  baseScale = Math.min((width-90)/Math.max(1,maxX-minX),(height-90)/Math.max(1,maxY-minY));
+  transform = {scale:baseScale,x:width/2-(minX+maxX)/2*baseScale,y:height/2-(minY+maxY)/2*baseScale}; cacheGraph(); draw();
+}
+function cacheGraph() {
+  const c = graphLayer.getContext('2d'), dpr = devicePixelRatio || 1; c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,width,height);
+  if (!graph) return;
+  c.beginPath(); c.strokeStyle = '#344d5e'; c.lineWidth = 1;
+  for (const e of graph.edges) { const a = screen(nodeMap.get(e.fromNodeId)), b = screen(nodeMap.get(e.toNodeId)); c.moveTo(a.x,a.y);c.lineTo(b.x,b.y); }
+  c.stroke(); c.fillStyle = '#527184'; c.beginPath();
+  for (const n of graph.nodes) { const p = screen(n); c.moveTo(p.x+1,p.y); c.arc(p.x,p.y,1,0,Math.PI*2); } c.fill();
+}
+function line(path,color,width=3,dashed=false) {
+  if (!path?.length) return; ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.setLineDash(dashed?[7,5]:[]);
+  path.forEach((p,i) => {const s = screen(p); i ? ctx.lineTo(s.x,s.y) : ctx.moveTo(s.x,s.y);});ctx.stroke();ctx.setLineDash([]);
+}
+function draw() {
+  ctx.clearRect(0,0,width,height);ctx.strokeStyle='#142632';ctx.lineWidth=1;ctx.beginPath();
+  for(let x=0;x<width;x+=32){ctx.moveTo(x,0);ctx.lineTo(x,height);}for(let y=0;y<height;y+=32){ctx.moveTo(0,y);ctx.lineTo(width,y);}ctx.stroke();
+  if (!graph) {ctx.fillStyle='#91a4b4';ctx.font='14px system-ui';ctx.textAlign='center';ctx.fillText('Load Graph to see the venue network',width/2,height/2);return;}
+  ctx.drawImage(graphLayer,0,0,width,height);
+  for(const v of state?.visitors || []) line(v.path,palette[v.id-1],selected===v.id?4:2.5);
+  if (explorerRoute) line(explorerRoute.path,'#ffffff',3,true);
+  for(const point of graph.meetingPoints){const p=screen(point), chosen=state?.meetingPoint?.id===point.id;
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);ctx.fillStyle=chosen?'#8be6be':'#ffd184';ctx.fillRect(-5,-5,10,10);ctx.restore();
+    if(chosen){ctx.beginPath();ctx.arc(p.x,p.y,16,0,Math.PI*2);ctx.strokeStyle='#8be6be';ctx.lineWidth=2;ctx.stroke();}
+    ctx.font='11px system-ui';ctx.textAlign='left';ctx.lineWidth=4;ctx.strokeStyle='#0b1720';ctx.strokeText(point.name,p.x+12,p.y-9);ctx.fillStyle=chosen?'#8be6be':'#e4c99f';ctx.fillText(point.name,p.x+12,p.y-9);
+  }
+  for(const [id,label] of [['fromNode','S'],['toNode','E']]){const n=nodeMap.get(Number($(id).value));if(n && explorerRoute){const p=screen(n);ctx.fillStyle='#fff';ctx.font='bold 12px system-ui';ctx.fillText(label,p.x+8,p.y+18);}}
+  for(const v of state?.visitors || []){const p=screen(v);ctx.beginPath();ctx.arc(p.x,p.y,selected===v.id?11:9,0,Math.PI*2);ctx.fillStyle=palette[v.id-1];ctx.fill();ctx.strokeStyle='#0b1720';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#13202b';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText(String.fromCharCode(64+v.id),p.x,p.y+4);}
+}
+function zoom(factor,x=width/2,y=height/2){const next=Math.max(baseScale*.5,Math.min(baseScale*30,transform.scale*factor)),ratio=next/transform.scale;transform.x=x-(x-transform.x)*ratio;transform.y=y-(y-transform.y)*ratio;transform.scale=next;cacheGraph();draw();}
+canvas.addEventListener('wheel',e=>{e.preventDefault();const r=canvas.getBoundingClientRect();zoom(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top);},{passive:false});
+let drag;
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);drag={x:e.clientX,y:e.clientY,originX:e.clientX,originY:e.clientY};});
+canvas.addEventListener('pointermove',e=>{if(!drag)return;transform.x+=e.clientX-drag.x;transform.y+=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;cacheGraph();draw();});
+canvas.addEventListener('pointercancel',()=>{drag=null;});
+canvas.addEventListener('pointerup',e=>{if(!drag)return;const click=Math.hypot(e.clientX-drag.originX,e.clientY-drag.originY)<5;drag=null;if(!click||!graph)return;
+  const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+  if(pickMode){let nearest,dist=Infinity;for(const n of graph.nodes){const p=screen(n),d=Math.hypot(x-p.x,y-p.y);if(d<dist){dist=d;nearest=n;}}$(pickMode).value=nearest.id;log(`Selected ${pickMode==='fromNode'?'start':'end'} node ${nearest.id}`);pickMode='';$('mapHint').textContent='Scroll to zoom · drag to pan · click a visitor to inspect';draw();return;}
+  for(const v of state?.visitors || []){const p=screen(v);if(Math.hypot(x-p.x,y-p.y)<18){selected=v.id;renderDetails();draw();break;}}
+});
+// Minimal JSON-only STOMP 1.2 client over the existing native /ws endpoint.
+// Framing reference: https://stomp.github.io/stomp-specification-1.2.html
+// No CDN dependency; JSON escapes embedded NULs, so NUL frame splitting is safe here.
+function frame(command,headers={},body=''){
+  const escape=value=>String(value).replace(/\\/g,'\\\\').replace(/\r/g,'\\r').replace(/\n/g,'\\n').replace(/:/g,'\\c');
+  const pairs=Object.entries(headers).map(([k,v])=>k+':'+(command==='CONNECT'?v:escape(v)));
+  if(body)pairs.push('content-length:'+new TextEncoder().encode(body).length);
+  return command+'\n'+pairs.join('\n')+'\n\n'+body+'\0';
+}
+function connect(){
+  clearTimeout(reconnectTimer);const generation=++socketGeneration;
+  if(socket)socket.close();connected=false;connectionStatus();
+  const ws=new WebSocket(`${location.protocol==='https:'?'wss:':'ws:'}//${location.host}/ws`,['v12.stomp']);socket=ws;let buffer='';
+  ws.onopen=()=>ws.send(frame('CONNECT',{'accept-version':'1.2',host:location.hostname,'heart-beat':'0,0'}));
+  ws.onmessage=e=>{if(generation!==socketGeneration)return;buffer+=e.data;
+    let end;while((end=buffer.indexOf('\0'))>=0){const raw=buffer.slice(0,end).replace(/^[\r\n]+/,'');buffer=buffer.slice(end+1);const split=raw.search(/\r?\n\r?\n/);if(split<0)continue;
+      const head=raw.slice(0,split).split(/\r?\n/),command=head[0],body=raw.slice(split+(raw[split]==='\r'?4:2));
+      if(command==='CONNECTED'){connected=true;connectionStatus();for(const [i,channel] of ['locations','navigation','updates'].entries())ws.send(frame('SUBSCRIBE',{id:'demo-'+i,destination:`/topic/demo/${sessionId}/${channel}`,ack:'auto'}));ws.send(frame('SUBSCRIBE',{id:'demo-errors',destination:'/user/topic/demo/errors',ack:'auto'}));log('STOMP connected · subscribed to demo locations, navigation and meeting updates','ws');refresh();}
+      else if(command==='MESSAGE'){try{const event=JSON.parse(body);if(event.message){error(new Error(event.message));continue;}messageCount++;$('eventCount').textContent=messageCount+' messages';log(`${event.event} · revision ${event.data.revision}`,'ws');apply(event.data);}catch(err){error(err);}}
+      else if(command==='ERROR'){error(new Error('STOMP error: '+body));ws.close();}
+    }
+  };
+  ws.onerror=()=>{if(generation===socketGeneration)log('WebSocket connection error; HTTP recovery remains available','error');};
+  ws.onclose=()=>{if(generation!==socketGeneration)return;connected=false;connectionStatus();log('STOMP disconnected · reconnecting in 3 seconds');reconnectTimer=setTimeout(connect,3000);};
+}
+function connectionStatus(){$('connection').textContent=connected?'● Live · STOMP':'● Offline · HTTP recovery';$('connection').className='status '+(connected?'live':'offline');}
+$('loadGraph').onclick=()=>run(loadGraph);
+$('newSession').onclick=()=>run(async()=>attach(await api(base,{})));
+$('join').onclick=()=>run(async()=>{const id=$('sessionId').value.trim();if(!/^[0-9a-f-]{36}$/i.test(id))throw new Error('Paste a valid simulation ID.');await attach(await api(`${base}/${encodeURIComponent(id)}`));});
+$('copyLink').onclick=()=>run(async()=>{await navigator.clipboard.writeText(location.href);log('Shared URL copied. Open it in another tab to join this simulation.');});
+$('spawn').onclick=()=>run(()=>command('SPAWN',{count:Number($('visitorCount').value)}));
+$('optimize').onclick=$('recalculate').onclick=()=>run(()=>command('OPTIMIZE'));
+$('calculate').onclick=()=>run(()=>command('ROUTES'));
+$('start').onclick=()=>run(()=>command('START'));
+$('pause').onclick=()=>run(()=>command('PAUSE'));
+$('reset').onclick=()=>run(async()=>{await command('RESET');explorerRoute=null;draw();});
+$('speed').onchange=()=>run(()=>command('SPEED',{speed:Number($('speed').value)}));
+$('fit').onclick=fit;$('zoomIn').onclick=()=>zoom(1.4);$('zoomOut').onclick=()=>zoom(1/1.4);
+$('pickStart').onclick=()=>{pickMode='fromNode';$('mapHint').textContent='Click the graph to choose the nearest start node';};
+$('pickEnd').onclick=()=>{pickMode='toNode';$('mapHint').textContent='Click the graph to choose the nearest end node';};
+$('explore').onclick=()=>run(async()=>{const fromNodeId=Number($('fromNode').value),toNodeId=Number($('toNode').value);if(!nodeMap.has(fromNodeId)||!nodeMap.has(toNodeId))throw new Error('Choose two existing graph node IDs.');explorerRoute=await api('/api/v1/navigation/route',{fromNodeId,toNodeId});$('routeResult').textContent=`${distance(explorerRoute.distanceMeters)} · ${duration(explorerRoute.estimatedDurationSeconds)} at backend walking speed · ${explorerRoute.path.length} path points`;draw();log('Node route calculated by backend');});
+$('clearRoute').onclick=()=>{explorerRoute=null;$('routeResult').textContent='Choose two nodes to calculate another route.';draw();};
+$('clearLog').onclick=()=>{$('log').replaceChildren();messageCount=0;$('eventCount').textContent='0 messages';};
+new ResizeObserver(resize).observe(canvas.parentElement);
+// Snapshot recovery also keeps viewed sessions alive; movement has exactly one server clock.
+setInterval(()=>{if(!document.hidden)refresh();},5000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
+window.addEventListener('beforeunload',()=>{socketGeneration++;clearTimeout(reconnectTimer);socket?.close();});
+run(async()=>{await loadGraph();const id=new URL(location.href).searchParams.get('simulation');await attach(id?await api(`${base}/${encodeURIComponent(id)}`):await api(base,{}));});
+</script>
+</body>
+</html>

@@ -24,10 +24,10 @@ public class GraphService {
 
     // Get a specific node by ID
     public GraphNode getNode(Long nodeId) {
-        GraphNode node = getGraph().nodes().get(nodeId);
+        GraphNode node = nodeId == null ? null : getGraph().nodes().get(nodeId);
 
         if (node == null) {
-            throw new IllegalArgumentException(
+            throw new com.nawaf.meetingpoint.Api.NavigationException(404,
                     "Graph node not found: " + nodeId
             );
         }

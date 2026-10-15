@@ -20,6 +20,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class ControllerAdvice {
 
 
+    @ExceptionHandler(com.nawaf.meetingpoint.Api.NavigationException.class)
+    public ResponseEntity<ApiResponse> navigation(com.nawaf.meetingpoint.Api.NavigationException e) {
+        return ResponseEntity.status(e.getStatus()).body(new ApiResponse(e.getMessage()));
+    }
+
     // Our Exception
     @ExceptionHandler(value = ApiException.class)
     public ResponseEntity<?> ApiException(ApiException e) {

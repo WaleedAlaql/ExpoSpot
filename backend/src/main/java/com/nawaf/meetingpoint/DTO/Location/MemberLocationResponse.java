@@ -1,14 +1,4 @@
-
 package com.nawaf.meetingpoint.DTO.Location;
-
-import java.time.LocalDateTime;
-
-public record MemberLocationResponse(
-        Long groupId,
-        Long userId,
-        Double latitude,
-        Double longitude,
-        Double accuracyMeters,
-        String status,
-        LocalDateTime updatedAt
-) {}
+import java.time.Instant;
+public record MemberLocationResponse(Integer groupId, Integer userId, Double latitude,
+    Double longitude, Double accuracyMeters, String status, Instant updatedAt) {}
