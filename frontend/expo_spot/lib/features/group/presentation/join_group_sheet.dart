@@ -4,8 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:expo_spot/core/theme/app_colors.dart';
 import 'package:expo_spot/core/theme/app_radii.dart';
 import 'package:expo_spot/core/theme/app_typography.dart';
+import 'package:expo_spot/features/group/presentation/join_invite_code_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 Future<void> showJoinGroupSheet(BuildContext context) {
   return showModalBottomSheet<void>(
@@ -25,11 +27,42 @@ class JoinGroupSheet extends StatefulWidget {
 
 class _JoinGroupSheetState extends State<JoinGroupSheet> {
   final _codeController = TextEditingController(text: 'EXPO-7K2M');
+  final _scannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.normal,
+    facing: CameraFacing.back,
+  );
+
+  String? _lastScannedRaw;
+  DateTime? _lastScanAt;
 
   @override
   void dispose() {
+    _scannerController.dispose();
     _codeController.dispose();
     super.dispose();
+  }
+
+  void _onBarcodeDetected(BarcodeCapture capture) {
+    if (!mounted) return;
+
+    for (final barcode in capture.barcodes) {
+      final code = parseInviteCodeFromScan(barcode.rawValue);
+      if (code == null || code.isEmpty) continue;
+
+      final now = DateTime.now();
+      if (_lastScannedRaw == code &&
+          _lastScanAt != null &&
+          now.difference(_lastScanAt!) < const Duration(seconds: 2)) {
+        continue;
+      }
+
+      _lastScannedRaw = code;
+      _lastScanAt = now;
+
+      HapticFeedback.mediumImpact();
+      setState(() => _codeController.text = code);
+      return;
+    }
   }
 
   void _completeJoin() {
@@ -90,28 +123,16 @@ class _JoinGroupSheetState extends State<JoinGroupSheet> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                AppColors.bottleGreen,
-                                AppColors.bottleGreen.withValues(alpha: 0.92),
-                                const Color(0xFF031510),
-                              ],
-                            ),
-                          ),
+                        MobileScanner(
+                          controller: _scannerController,
+                          fit: BoxFit.cover,
+                          onDetect: _onBarcodeDetected,
+                          errorBuilder: (context, error) =>
+                              _JoinCameraError(message: _cameraErrorMessage(error)),
                         ),
-                        CustomPaint(
-                          painter: const _ScanViewportPainter(),
-                        ),
-                        Center(
-                          child: Icon(
-                            Icons.qr_code_2_rounded,
-                            size: 56,
-                            color: Colors.white.withValues(alpha: 0.12),
-                          ),
+                        const CustomPaint(
+                          painter: _ScanViewportPainter(),
+                          child: SizedBox.expand(),
                         ),
                       ],
                     ),
@@ -180,6 +201,50 @@ class _JoinGroupSheetState extends State<JoinGroupSheet> {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _cameraErrorMessage(MobileScannerException error) {
+    return switch (error.errorCode) {
+      MobileScannerErrorCode.permissionDenied => 'join_camera_denied'.tr(),
+      MobileScannerErrorCode.unsupported => 'join_camera_unavailable'.tr(),
+      _ => 'join_camera_unavailable'.tr(),
+    };
+  }
+}
+
+class _JoinCameraError extends StatelessWidget {
+  const _JoinCameraError({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: const Color(0xFF031510),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.no_photography_rounded,
+                size: 40,
+                color: Colors.white.withValues(alpha: 0.55),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: AppTypography.subtitle(context).copyWith(
+                  color: Colors.white.withValues(alpha: 0.88),
+                ),
+              ),
+            ],
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expo_spot/core/localization/meeting_point_l10n.dart';
 import 'package:expo_spot/core/theme/app_colors.dart';
 import 'package:expo_spot/core/theme/app_radii.dart';
 import 'package:expo_spot/core/theme/app_typography.dart';
@@ -143,127 +144,143 @@ class _NameLabel extends StatelessWidget {
   }
 }
 
+/// Classic Google Maps red drop pin (`Icons.location_on`).
+class GoogleMapsRedPin extends StatelessWidget {
+  const GoogleMapsRedPin({
+    super.key,
+    required this.size,
+    this.elevated = false,
+  });
+
+  /// Google Maps marker red.
+  static const Color googleRed = Color(0xFFEA4335);
+
+  final double size;
+  final bool elevated;
+
+  @override
+  Widget build(BuildContext context) {
+    final pin = Icon(
+      Icons.location_on,
+      color: googleRed,
+      size: size,
+      shadows: [
+        Shadow(
+          color: Colors.black.withValues(alpha: 0.18),
+          blurRadius: 2,
+          offset: Offset(0, size * 0.04),
+        ),
+      ],
+    );
+
+    if (!elevated) {
+      return SizedBox(width: size, height: size, child: pin);
+    }
+
+    return SizedBox(
+      width: size,
+      height: size,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.28),
+              blurRadius: size * 0.22,
+              offset: Offset(0, size * 0.08),
+            ),
+          ],
+        ),
+        child: pin,
+      ),
+    );
+  }
+}
+
 /// Smaller pin for candidate meeting points (not the selected fair point).
 class MeetingPointCandidateMarker extends StatelessWidget {
   const MeetingPointCandidateMarker({super.key, required this.name});
 
   final String name;
 
+  static const _pinSize = 34.0;
+
   @override
   Widget build(BuildContext context) {
+    final displayName = MeetingPointL10n.venueName(context, name);
+    final textDirection = Directionality.of(context);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 22,
-          height: 22,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.surface.withValues(alpha: 0.95),
-            border: Border.all(color: AppColors.keppelGreen.withValues(alpha: 0.55)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.12),
-                blurRadius: 4,
-                offset: const Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.place_outlined,
-            size: 14,
-            color: AppColors.bottleGreen.withValues(alpha: 0.75),
-          ),
-        ),
-        const SizedBox(height: 3),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 84),
           child: Text(
-            name,
+            displayName,
             maxLines: 2,
             textAlign: TextAlign.center,
+            textDirection: textDirection,
             overflow: TextOverflow.ellipsis,
             style: AppTypography.label(context).copyWith(
               fontSize: 8,
               height: 1.15,
               fontWeight: FontWeight.w600,
-              color: AppColors.bottleGreen.withValues(alpha: 0.9),
+              color: AppColors.bottleGreen.withValues(alpha: 0.92),
+              shadows: [
+                Shadow(
+                  color: Colors.white.withValues(alpha: 0.95),
+                  blurRadius: 4,
+                ),
+              ],
             ),
           ),
         ),
+        const SizedBox(height: 1),
+        const GoogleMapsRedPin(size: _pinSize),
       ],
     );
   }
 }
 
-/// Google Maps–style place chip: white ring, grey disc, white pin glyph.
+/// Selected fair meet point — larger red Google pin + label.
 class MeetPointMarker extends StatelessWidget {
   const MeetPointMarker({
     super.key,
+    this.labelKey,
     this.label,
     this.highlighted = false,
   });
 
+  /// Preferred: resolves with the active [BuildContext] locale.
+  final String? labelKey;
   final String? label;
   final bool highlighted;
 
-  static const _googleGreyTop = Color(0xFF9AA0A6);
-  static const _googleGreyBottom = Color(0xFF3C4043);
+  static const _pinSize = 48.0;
+  static const _pinSizeHighlighted = 56.0;
 
   @override
   Widget build(BuildContext context) {
-    final chipLabel = label ?? 'meet_point_pin'.tr();
+    final chipLabel = labelKey != null
+        ? MeetingPointL10n.trKey(context, labelKey!)
+        : (label ?? 'meet_point_pin'.tr(context: context));
+    final textDirection = Directionality.of(context);
+    final pinSize = highlighted ? _pinSizeHighlighted : _pinSize;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 46,
-          height: 46,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            border: highlighted
-                ? Border.all(color: AppColors.keppelGreen, width: 3)
-                : null,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.22),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(3),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: highlighted
-                    ? [AppColors.keppelGreen, AppColors.bottleGreen]
-                    : const [_googleGreyTop, _googleGreyBottom],
-              ),
-            ),
-            child: const Icon(
-              Icons.location_on,
-              color: Colors.white,
-              size: 28,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: AppColors.surface.withValues(alpha: 0.96),
             borderRadius: BorderRadius.circular(AppRadii.badge),
             border: Border.all(
-              color: highlighted ? AppColors.keppelGreen : AppColors.border,
+              color: highlighted ? GoogleMapsRedPin.googleRed : AppColors.border,
+              width: highlighted ? 1.5 : 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 4,
                 offset: const Offset(0, 1),
               ),
@@ -273,6 +290,7 @@ class MeetPointMarker extends StatelessWidget {
             chipLabel,
             maxLines: 2,
             textAlign: TextAlign.center,
+            textDirection: textDirection,
             overflow: TextOverflow.ellipsis,
             style: AppTypography.label(context).copyWith(
               color: AppColors.bottleGreen,
@@ -281,6 +299,8 @@ class MeetPointMarker extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 2),
+        GoogleMapsRedPin(size: pinSize, elevated: highlighted),
       ],
     );
   }

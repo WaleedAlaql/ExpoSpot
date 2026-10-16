@@ -71,7 +71,7 @@ class _ReunionPlanSheet extends ConsumerWidget {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            group.meetPointLabelKey.tr(),
+                            group.meetPointLabelKey.tr(context: context),
                             style: AppTypography.body(context).copyWith(
                               fontWeight: FontWeight.w600,
                             ),

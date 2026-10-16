@@ -98,17 +98,17 @@ abstract final class MeetingPointMapLayers {
 
     return SelectedFairMeetingPoint(
       id: 'fair-${meet.latitude}-${meet.longitude}',
-      name: _nameFromLabelKey(group.meetPointLabelKey),
+      name: _englishNameFromLabelKey(group.meetPointLabelKey),
       latLng: meet,
     );
   }
 
-  static String _nameFromLabelKey(String? key) {
+  static String _englishNameFromLabelKey(String key) {
     return switch (key) {
       'meet_point_alt_east' => 'Sea Plaza',
       'meet_point_alt_west' => 'Sun Plaza',
       'meet_point_primary' => 'Earth Plaza',
-      _ => 'Meet point',
+      _ => 'Earth Plaza',
     };
   }
 
@@ -136,10 +136,13 @@ abstract final class MeetingPointMapLayers {
       markers.add(
         Marker(
           point: point.latLng,
-          width: 88,
-          height: 52,
-          alignment: Alignment.topCenter,
-          child: MeetingPointCandidateMarker(name: point.name),
+          width: 92,
+          height: 72,
+          alignment: Alignment.bottomCenter,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: MeetingPointCandidateMarker(name: point.name),
+          ),
         ),
       );
     }
@@ -148,12 +151,15 @@ abstract final class MeetingPointMapLayers {
       markers.add(
         Marker(
           point: fairPoint.latLng,
-          width: 96,
-          height: 96,
-          alignment: Alignment.topCenter,
-          child: MeetPointMarker(
-            label: fairPoint.name,
-            highlighted: true,
+          width: 132,
+          height: 112,
+          alignment: Alignment.bottomCenter,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: MeetPointMarker(
+              labelKey: 'best_meeting_point',
+              highlighted: true,
+            ),
           ),
         ),
       );
